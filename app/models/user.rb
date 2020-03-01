@@ -6,4 +6,27 @@ class User < ApplicationRecord
                   uniqueness: { case_sensitive: false }
     
     has_secure_password
+    
+    has_many :microposts
+    has_many :relationships
+    has_many :followings, through: :relationships, source: :follow
+    has_many :reverses_of_relationship, class_name: 'Relationship', foreign_key: 'follow_id'
+    has_many :followers, through: :reverses_of_relationship, source: :user
+    
+    def follow(othe_user)
+        unless self == othe_user
+            self.relationships.find_or_create_by(follow_id: othe_user.id)
+        end
+    end
+    
+    def unfollow(othe_user)
+        relationship = self.relationships.find_by(follow_id: othe_user.id)
+        relationship.destroy if relationship
+    end
+    
+    def following?(othe_user)
+        self.followings.include?(othe_user)
+    end
+    
+    
 end

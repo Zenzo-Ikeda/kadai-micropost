@@ -1,0 +1,17 @@
+<div class='container'>
+  
+ <h1>お気に入り一覧</h1>
+
+   <% @likes.each do |like| %>
+    
+       <div class ='row' >
+        <p> 名前:<%= like.user.name %> </p>
+        <p> 投稿:<%= like.content %> </p>
+        </div>
+     
+    <% end %>
+
+  <%= paginate @likes %>
+
+</div>
+  
